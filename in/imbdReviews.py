@@ -25,15 +25,12 @@ driver.find_element_by_name("btnK").send_keys(Keys.ENTER)
 time.sleep(1)
 
 #Click the first URL shown, given a search page.
-driver.implicitly_wait(10)
+driver.implicitly_wait(3)
 driver.find_element_by_class_name("r").click()
-driver.implicitly_wait(10)
-
-
-#Click the user reviews link
 driver.implicitly_wait(3)
-driver.find_element_by_xpath("/html/body/div[3]/div/div[2]/div[5]/div[1]/div[2]/div/div[1]/div[1]/div[1]/a[3]").click()
-driver.implicitly_wait(3)
+
+#Go to the user reviews page
+driver.find_element_by_id("quicklinksMainSection").click()
 
 #Scrap IMBD review
 ans = driver.current_url
@@ -46,23 +43,26 @@ all = soup.find(id="main")
 parent = all.find(class_ ="parent")
 name = parent.find(itemprop = "name")
 url = name.find(itemprop = 'url')
-movie_title = url.get_text()
+film_title = url.get_text()
 
-#Get the title of the review
+# Get the title of the review
 title_rev = all.select(".title")
 title = [t.get_text().replace("\n", "") for t in title_rev]
 
-#Get the review
+#Get the review itself
 review_rev = all.select(".content .text")
 review = [r.get_text() for r in review_rev]
 
-#Make it into dataframe
+#Turn it into a dataframe
 table_review = pd.DataFrame({
     "Title" : title,
     "Review" : review
 })
 
-#Sentiment Analysis
+#Actual Review Analysis Time :p
+analyser = SentimentIntensityAnalyzer()
+sentiment1 = []
+sentiment2 = []
 
 analyser = SentimentIntensityAnalyzer()
 sentiment1 = []
@@ -87,9 +87,9 @@ for rev in review:
         sentiment2.append('positive')
     else:
         sentiment2.append('negative')
-print(f"The movie title is {movie_title}")
+print(f"The movie title is {film_title}")
 print("")
-print("According to Vadersentiemnt, you should :")
+print("According to vadersentiemnt, you should :")
 if sentiment1.count('positive') > sentiment1.count('negative'):
     print('WATCH IT!')
 else:
@@ -105,5 +105,5 @@ else:
 print('Positive : ', sentiment2.count('positive'))
 print('Negative : ', sentiment2.count('negative'))
 
-#Close google chrome
+#Close Google Chrome
 driver.close()
