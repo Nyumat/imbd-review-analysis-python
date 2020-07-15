@@ -29,8 +29,11 @@ driver.implicitly_wait(10)
 driver.find_element_by_class_name("r").click()
 driver.implicitly_wait(10)
 
-#Click the user reviews
-driver.find_element_by_xpath("/html/body/div[3]/div/div[2]/div[5]/div[1]/div/div/div[1]/div[1]/div[1]/a[3]").click()
+
+#Click the user reviews link
+driver.implicitly_wait(3)
+driver.find_element_by_xpath("/html/body/div[3]/div/div[2]/div[5]/div[1]/div[2]/div/div[1]/div[1]/div[1]/a[3]").click()
+driver.implicitly_wait(3)
 
 #Scrap IMBD review
 ans = driver.current_url
