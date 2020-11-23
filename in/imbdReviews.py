@@ -6,12 +6,13 @@ import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from textblob import TextBlob
 import time
+from webdriver_manager.chrome import ChromeDriverManager
 
 #Ask the user for the movie they would like to watch.
 movie = input("What movie or tv shows do you want to watch? : ")
 
 # Set the web browser to chrome.
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 # Uses Get Method to go to google.
 driver.get("https://www.google.com/")
@@ -30,7 +31,10 @@ driver.find_element_by_class_name("r").click()
 driver.implicitly_wait(3)
 
 #Go to the user reviews page
-driver.find_element_by_id("quicklinksMainSection").click()
+driver.implicitly_wait(2)
+list_of_class = driver.find_elements_by_xpath("/html/body/div[2]/div/div[2]/div/div[1]/div/div/div[1]/div[1]/div[1]/a[3]")
+list_of_class.click()
+driver.implicitly_wait(3)
 
 #Scrap IMBD review
 ans = driver.current_url
